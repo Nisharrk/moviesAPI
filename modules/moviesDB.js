@@ -63,10 +63,16 @@ module.exports = class MoviesDB {
     });
   }
 
+  // async addNewMovie(data) {
+  //   const newMovie = new this.Movie(data);
+  //   await newMovie.save();
+  //   return newMovie;
+  // }
+
   async addNewMovie(data) {
     const newMovie = new this.Movie(data);
-    await newMovie.save();
-    return newMovie;
+    const addedMovie = await newMovie.save();
+    return addedMovie;
   }
 
   getAllMovies(page, perPage, title) {

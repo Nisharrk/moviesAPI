@@ -4,7 +4,6 @@ const morgan = require("morgan");
 
 const middlewares = require("./middlewares/middlewares.js");
 const MoviesDB = require("./modules/moviesDB.js");
-const routes = require("./api/routes.js");
 
 const app = express();
 
@@ -23,7 +22,57 @@ app.get("/", (req, res) => {
 });
 
 // api routes
-app.get("/api/movies", routes);
+// get movies with filters
+app.get("/api/movies", async (req, res, next) => {
+  try {
+    const { page, perPage, title } = req.query;
+    const movies = await db.getAllMovies(page, perPage, title);
+    res.status(200).json(movies);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// get movies by id
+app.get("/api/movies/:id", async (req, res, next) => {
+  try {
+    const movie = await db.getMovieById(req.params.id);
+    res.status(200).json(movie);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// add a movie
+app.post("/api/movies", async (req, res, next) => {
+  try {
+    const movie = await db.addNewMovie(req.body);
+    res.status(201).json(movie);
+    // console.log(movie);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// update movie
+app.put("/api/movies/:id", async (req, res, next) => {
+  try {
+    const updatedMovie = await db.updateMovieById(req.body, req.params.id);
+    res.status(200).json({ message: "Movie updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// delete movie
+app.delete("/api/movies/:id", async (req, res, next) => {
+  try {
+    const result = await db.deleteMovieById(req.params.id);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // Error Handlers, see ./middlewares/middlewares.js
 app.use(middlewares.notFound);
