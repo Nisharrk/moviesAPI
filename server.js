@@ -11,10 +11,10 @@
  ********************************************************************************/
 
 const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
+const cors = require("cors"); // cors-origin
+const morgan = require("morgan"); // a logger
 
-const middlewares = require("./middlewares/middlewares.js");
+const middlewares = require("./middlewares/middlewares.js"); // it handles error handling using next middleware
 const MoviesDB = require("./modules/moviesDB.js");
 
 const app = express();
@@ -22,10 +22,10 @@ const app = express();
 require("dotenv").config();
 
 app.use(cors());
-app.use(morgan("common"));
+app.use(morgan("common")); // it will
 app.use(express.json());
 
-const db = new MoviesDB();
+const db = new MoviesDB(); // creates a object from the MovieDB class
 
 const port = process.env.PORT;
 
@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
   res.json({ message: "API Listening" });
 });
 
-// api routes
+/******************************* API ROUTES **************************************/
 // get movies with filters
 app.get("/api/movies", async (req, res, next) => {
   try {
@@ -85,8 +85,9 @@ app.delete("/api/movies/:id", async (req, res, next) => {
     next(error);
   }
 });
+/******************************* API ROUTES **************************************/
 
-// Error Handlers, see ./middlewares/middlewares.js
+// Error Handling middlewares, see ./middlewares/middlewares.js
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
