@@ -22,7 +22,7 @@ const app = express();
 require("dotenv").config();
 
 app.use(cors());
-app.use(morgan("common")); // it will
+app.use(morgan("common"));
 app.use(express.json());
 
 const db = new MoviesDB(); // creates a object from the MovieDB class
